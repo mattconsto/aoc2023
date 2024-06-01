@@ -41,6 +41,21 @@ while (my $position = shift @queue) {
     push @queue, [$gy, $x > 0 ? $gx : $gx - 1, $y, $x > 0 ? $x - 1 : length($map[$y]) - 1, $depth + 1];
 }
 
+# The following was found by simulating the elf's walk and printing the number
+# of garden plots reached at 65, 196, 327, 458, 589 steps and so on.
+# Then find the difference between each step, followed by the the difference of
+# the difference to get:
+#
+# | Step | Reached | Diff_1 | Diff_2 |
+# |------|---------|--------|--------|
+# | 65   | 3784    | *      |        |
+# | 196  | 33680   | 29896  |        |
+# | 327  | 93366   | 59686  | 29790  |
+# | 458  | 182842  | 89476  | 29790  |
+# | 589  | 302108  | 119266 | 29790  |
+#
+# * If you work backwards, you get 106 here
+
 my $delta2 = $totals{2 * $full_width + $half_width} - 2 * $totals{$full_width + $half_width} + $totals{$half_width};
 my $delta = $totals{$full_width + $half_width} - $totals{$half_width} - $delta2;
 my $row = $totals{$half_width};
