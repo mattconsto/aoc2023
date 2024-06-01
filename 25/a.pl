@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Graph::Undirected;
+use Graph::Writer::Dot;
 use List::Util qw(product);
 
 my $graph = Graph::Undirected->new;
@@ -20,12 +21,24 @@ while (<STDIN>) {
     }
 }
 
-# use Graph::Writer::Dot;
-# my $writer = Graph::Writer::Dot->new;
-# $writer->write_graph($graph, 'mygraph.dot');
+my $writer = Graph::Writer::Dot->new;
+$writer->write_graph($graph, '25.dot');
+
+# Then use the following HTML to visualise the graph, and find the wires to disconnect:
+# <!DOCTYPE html>
+# <meta charset="utf-8">
+# <body>
+# <script src="https://d3js.org/d3.v5.min.js"></script>
+# <script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>
+# <script src="https://unpkg.com/d3-graphviz@3.0.5/build/d3-graphviz.js"></script>
+# <div id="graph"></div>
+# <script>d3.select("#graph").graphviz().renderDot(`
+# graph g {
+# ...
+# }`);</script>
 
 my @totals;
-for my $start (qw(xpf pdp)) { # randomly chosen
+for my $start (qw(xpf pdp)) { # previously found values
     my @queue = ($start);
     my %seen;
     my $total = 0;
